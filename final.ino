@@ -1,3 +1,5 @@
+// Balin Dimond, William Bryan, Brecken McCrory
+
 #include <LiquidCrystal.h>
 #include <Stepper.h>
 #include <RTClib.h>
