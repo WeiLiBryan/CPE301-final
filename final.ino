@@ -48,7 +48,7 @@ SimpleDHT11 dht(DHT_PIN);
 RTC_DS1307 rtc;
 Stepper stepper(STEPPER_STEPS, STEPPER_PIN1, STEPPER_PIN2, STEPPER_PIN3, STEPPER_PIN4);
 
-// State machine
+// machine state
 enum State {DISABLED, IDLE, RUNNING, ERROR};
 State state = DISABLED, prevState = DISABLED;
 
@@ -88,6 +88,19 @@ void updateLEDs(State s) {
   digitalWrite(LED_GREEN,  s == IDLE);
   digitalWrite(LED_YELLOW, s == DISABLED);
   digitalWrite(LED_BLUE,   s == RUNNING);
+}
+
+// timestamps
+void logTimestamp(const char* label) {
+  DateTime now = rtc.now();
+  Serial.print(label);
+  Serial.print(" at ");
+  Serial.print(now.month()); Serial.print("/");
+  Serial.print(now.day()); Serial.print("/");
+  Serial.print(now.year()); Serial.print(" ");
+  Serial.print(now.hour()); Serial.print(":");
+  Serial.print(now.minute()); Serial.print(":");
+  Serial.println(now.second());
 }
 
 // lcddisplay
@@ -141,6 +154,7 @@ void handleButtons() {
 void logStateChange(State from, State to) {
   Serial.print("[STATE] ");
   Serial.print(from); Serial.print(" -> "); Serial.println(to);
+  logTimestamp("State changed");
 }
 
 // display snesor values on serial
